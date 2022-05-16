@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.octautumn.cpumemsimulation.HelloController">
+   <children>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+            <Button mnemonicParsing="false" onAction="#resetSimulator" text="重置模拟器">
+               <tooltip>
+                  <Tooltip text="将模拟器重置为初始状态" />
+               </tooltip></Button>
+          <Button mnemonicParsing="false" onAction="#nextTimeSlice" text="执行下一时间片">
+               <tooltip>
+                  <Tooltip text="执行下一个处理器时间片" />
+               </tooltip></Button>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="处理道数：">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Text>
+            <Spinner editable="true" prefHeight="23.0" prefWidth="80.0">
+               <tooltip>
+                  <Tooltip text="载入内存的最大进程数（设为0则不限制）" />
+               </tooltip>
+            </Spinner>
+        </items>
+      </ToolBar>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="处理机状态">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Text>
+      <HBox prefHeight="80.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="处理机Ⅰ" />
+                  <Label fx:id="processor1Status" text="（空闲）" />
+               </children>
+            </VBox>
+            <Separator orientation="VERTICAL" prefHeight="200.0">
+               <HBox.margin>
+                  <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+               </HBox.margin>
+            </Separator>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="处理机Ⅱ" />
+                  <Label fx:id="processor2Status" text="（空闲）" />
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+      <Separator prefWidth="200.0">
+         <VBox.margin>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </VBox.margin>
+      </Separator>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="主存状态（0Block/0Block）">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Text>
+      <HBox alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 2px; -fx-border-color: #606060; -fx-border-radius: 2px;">
+         <VBox.margin>
+            <Insets bottom="10.0" top="5.0" />
+         </VBox.margin>
+      </HBox>
+      <TableView prefHeight="200.0">
+         <columns>
+            <TableColumn resizable="false" text="分区ID" />
+            <TableColumn prefWidth="150.0" resizable="false" text="起始位置（Block）" />
+            <TableColumn prefWidth="150.0" resizable="false" text="结束位置（Block）" />
+            <TableColumn prefWidth="100.0" resizable="false" text="大小（Block）" />
+            <TableColumn resizable="false" text="状态" />
+         </columns>
+      </TableView>
+      <Button mnemonicParsing="false" text="设置模拟主存" />
+      <Separator prefWidth="200.0">
+         <VBox.margin>
+            <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+         </VBox.margin>
+      </Separator>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="进程表">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </Text>
+      <TableView prefHeight="200.0">
+        <columns>
+          <TableColumn prefWidth="150.0" resizable="false" text="进程名/PID" />
+          <TableColumn prefWidth="100.0" resizable="false" text="要求运行时间" />
+            <TableColumn prefWidth="60.0" resizable="false" text="优先权" />
+            <TableColumn prefWidth="70.0" resizable="false" text="状态" />
+            <TableColumn resizable="false" text="属性" />
+            <TableColumn prefWidth="100.0" resizable="false" text="占用主存大小" />
+            <TableColumn prefWidth="100.0" resizable="false" text="主存起始位置" />
+        </columns>
+      </TableView>
+      <GridPane>
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <HBox alignment="CENTER_LEFT">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="进程名（可留空）：" />
+                  <TextField />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" GridPane.rowIndex="1">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="要求运行时间：" />
+                  <Spinner editable="true">
+                     <tooltip>
+                        <Tooltip text="进程要求运行的时间片数(1~256)" />
+                     </tooltip></Spinner>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="单位：时间片" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="优先权：" />
+                  <Spinner editable="true">
+                     <tooltip>
+                        <Tooltip text="进程的调度优先级（从零开始，越大优先级越高）" />
+                     </tooltip></Spinner>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="属性：" />
+                  <RadioButton mnemonicParsing="false" selected="true" text="独立进程">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="a1" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton mnemonicParsing="false" text="同步进程" toggleGroup="$a1" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="前驱/后继进程：" />
+                  <ChoiceBox prefWidth="150.0">
+                     <tooltip>
+                        <Tooltip text="该进程的前驱/后继进程PID" />
+                     </tooltip></ChoiceBox>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="占用主存大小：" />
+                  <Spinner editable="true">
+                     <tooltip>
+                        <Tooltip text="进程要求占用的主存空间（1~MAX_MEM）" />
+                     </tooltip></Spinner>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="单位：Block" />
+               </children>
+            </HBox>
+         </children>
+      </GridPane>
+      <Button mnemonicParsing="false" text="添加新进程" />
+   </children>
+   <padding>
+      <Insets left="10.0" right="10.0" />
+   </padding>
+</VBox>
