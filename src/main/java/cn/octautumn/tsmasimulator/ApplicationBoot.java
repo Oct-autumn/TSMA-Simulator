@@ -1,4 +1,4 @@
-package cn.octautumn.cpumemsimulation;
+package cn.octautumn.tsmasimulator;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -7,15 +7,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class HelloApplication extends Application
+public class ApplicationBoot extends Application
 {
     @Override
     public void start(Stage stage) throws IOException
     {
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 800);
+        FXMLLoader fxmlLoader = new FXMLLoader(ApplicationBoot.class.getResource("main-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 800, 750);
         stage.setResizable(false);
-        stage.setTitle("CPU-MEM 模拟器");
+        stage.setTitle("TSMA模拟器");
         stage.setScene(scene);
         stage.show();
     }
@@ -23,5 +23,6 @@ public class HelloApplication extends Application
     public static void main(String[] args)
     {
         launch();
+        CoreResource.resetSimulator();
     }
 }

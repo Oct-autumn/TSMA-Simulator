@@ -5,24 +5,37 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b4093ca3-4585-4d0b-943e-8e452b9bd0bc" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.jar" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/cpumemsimulation/HelloApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/cpumemsimulation/HelloController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/cpumemsimulation/main-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ConfigSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/CoreResource.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/MainSceneController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SimulatorConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimMemoryBlock.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcess.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcessor.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/config-view.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/cpumemsimulation/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ApplicationBoot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/cpumemsimulation/HelloController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/cn/octautumn/cpumemsimulation/main-view.fxml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Enum" />
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -41,14 +54,22 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "settings.editor.selected.configurable": "vcs.Git"
+    "last_directory_selection": "D:/UserData/Documents/GitHub/TSMA-Simulator/src/main/java/cn/octautumn/tsmasimulator",
+    "last_opened_file_path": "C:/Users/lljki/AppData/Local/SceneBuilder/SceneBuilder.exe",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="cn.octautumn.tsmasimulator.model" />
+    </key>
+  </component>
   <component name="RunManager">
     <configuration name="main" type="Application" factoryName="Application">
-      <option name="MAIN_CLASS_NAME" value="cn.octautumn.cpumemsimulation.HelloApplication" />
-      <module name="cpu-mem-simulation" />
+      <option name="MAIN_CLASS_NAME" value="cn.octautumn.tsmasimulator.ApplicationBoot" />
+      <module name="TSMA-Simulator" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -79,5 +100,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

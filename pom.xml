@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cn.octautumn</groupId>
-    <artifactId>cpu-mem-simulation</artifactId>
+    <artifactId>TSMASimulator</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <name>cpu-mem-simulation</name>
+    <name>进程调度与内存分配模拟器</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>18</version>
+            <version>18.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
@@ -42,6 +42,12 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.22</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -64,7 +70,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>cn.octautumn.cpumemsimulation/cn.octautumn.cpumemsimulation.HelloApplication
+                            <mainClass>cn.octautumn.tsmasimulator/cn.octautumn.tsmasimulator.ApplicationBoot
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
