@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
@@ -21,18 +22,15 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.octautumn.tsmasimulator.MainSceneController">
+<VBox alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.octautumn.tsmasimulator.SceneController.MainSceneController">
    <children>
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
             <Button mnemonicParsing="false" onAction="#showSettingDialog" text="模拟器设置" />
+            <Button mnemonicParsing="false" onAction="#resetSimulator" text="重置模拟器" />
             <Button mnemonicParsing="false" onAction="#startSimulator" text="开始模拟">
                <tooltip>
                   <Tooltip text="将模拟器重置为初始状态" />
-               </tooltip></Button>
-          <Button mnemonicParsing="false" onAction="#nextTimeSlice" text="执行下一时间片">
-               <tooltip>
-                  <Tooltip text="执行下一个处理器时间片" />
                </tooltip></Button>
         </items>
       </ToolBar>
@@ -48,7 +46,25 @@
                   <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="处理机Ⅰ" />
-                        <Label fx:id="processor1Status" text="（空闲）" />
+                        <Label fx:id="processorStatus1" text="（空闲）" />
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
+                            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="时间片进度：" />
+                              <ProgressBar fx:id="pbTimeSliceProgress1" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="进程进度：" GridPane.rowIndex="1" />
+                              <ProgressBar fx:id="pbProcessProgress1" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="lbTimeSliceProgress1" text="（空闲）" GridPane.columnIndex="1" />
+                              <Label fx:id="lbProcessProgress1" text="（空闲）" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
                      </children>
                   </VBox>
                   <Separator orientation="VERTICAL" prefHeight="200.0">
@@ -59,7 +75,25 @@
                   <VBox alignment="TOP_CENTER" HBox.hgrow="ALWAYS">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="处理机Ⅱ" />
-                        <Label fx:id="processor2Status" text="（空闲）" />
+                        <Label fx:id="processorStatus2" text="（空闲）" />
+                        <GridPane>
+                           <columnConstraints>
+                              <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" minWidth="10.0" prefWidth="10.0" />
+                              <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="时间片进度：" />
+                              <ProgressBar fx:id="pbTimeSliceProgress2" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" />
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="进程进度：" GridPane.rowIndex="1" />
+                              <ProgressBar fx:id="pbProcessProgress2" prefWidth="200.0" progress="0.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="lbTimeSliceProgress2" text="（空闲）" GridPane.columnIndex="1" />
+                              <Label fx:id="lbProcessProgress2" text="（空闲）" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
                      </children>
                   </VBox>
                </children>
@@ -69,23 +103,23 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </VBox.margin>
             </Separator>
-            <Text fx:id="textMemStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="主存状态（0KByte/0KByte）">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="主存状态">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
-            <HBox fx:id="hBoxMemStatusBar" alignment="CENTER_LEFT" prefHeight="50.0" style="-fx-background-color: #FFFFFF; -fx-background-radius: 2px; -fx-border-color: #606060; -fx-border-radius: 2px;">
+            <Text fx:id="textMemStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="0KByte/0KByte" />
+            <ProgressBar prefHeight="20.0" prefWidth="700.0" progress="0.0">
                <VBox.margin>
-                  <Insets bottom="10.0" top="5.0" />
+                  <Insets bottom="3.0" top="3.0" />
                </VBox.margin>
-            </HBox>
+            </ProgressBar>
             <TableView fx:id="tViewMemBlockTable" prefHeight="200.0">
                <columns>
-                  <TableColumn editable="false" resizable="false" text="分区ID" />
-                  <TableColumn editable="false" prefWidth="150.0" resizable="false" text="起始位置（KByte）" />
-                  <TableColumn editable="false" prefWidth="150.0" resizable="false" text="结束位置（KByte）" />
-                  <TableColumn editable="false" prefWidth="100.0" resizable="false" text="大小（KByte）" />
-                  <TableColumn resizable="false" text="状态" />
+                  <TableColumn fx:id="tcMemBlockStartPos" editable="false" prefWidth="150.0" resizable="false" text="起始位置（KByte）" />
+                  <TableColumn fx:id="tcMemBlockEndPos" editable="false" prefWidth="150.0" resizable="false" text="结束位置（KByte）" />
+                  <TableColumn fx:id="tcMemBlockSize" editable="false" prefWidth="100.0" resizable="false" text="大小（KByte）" />
+                  <TableColumn fx:id="tcMemBlockStatus" editable="false" resizable="false" text="状态" />
                </columns>
             </TableView>
             <Separator prefWidth="200.0">
@@ -100,13 +134,14 @@
             </Text>
             <TableView fx:id="tViewThreadTable" prefHeight="200.0">
               <columns>
-                <TableColumn editable="false" prefWidth="150.0" resizable="false" text="进程名/PID" />
-                <TableColumn editable="false" prefWidth="100.0" resizable="false" text="要求运行时间" />
-                  <TableColumn prefWidth="60.0" resizable="false" text="优先权" />
-                  <TableColumn prefWidth="70.0" resizable="false" text="状态" />
-                  <TableColumn editable="false" resizable="false" text="属性" />
-                  <TableColumn editable="false" prefWidth="100.0" resizable="false" text="占用主存大小" />
-                  <TableColumn editable="false" prefWidth="100.0" resizable="false" text="主存起始位置" />
+                <TableColumn fx:id="tcProcessNameAndID" editable="false" prefWidth="130.0" resizable="false" text="进程名/PID" />
+                <TableColumn fx:id="tcProcessRequireRunTime" editable="false" prefWidth="100.0" resizable="false" text="T-RT" />
+                  <TableColumn fx:id="tcProcessPriority" prefWidth="60.0" resizable="false" text="优先权" />
+                  <TableColumn fx:id="tcProcessStatus" editable="false" prefWidth="70.0" resizable="false" text="状态" />
+                  <TableColumn fx:id="tcProcessProperty" editable="false" prefWidth="120.0" resizable="false" text="属性" />
+                  <TableColumn fx:id="tcProcessMemSize" editable="false" prefWidth="100.0" resizable="false" text="占用主存大小" />
+                  <TableColumn fx:id="tcProcessMemStartPos" editable="false" prefWidth="100.0" resizable="false" text="主存起始位置" />
+                  <TableColumn fx:id="tcToggleProcessHang" prefWidth="75.0" sortable="false" text="挂起/解挂" />
               </columns>
             </TableView>
             <GridPane>
@@ -134,7 +169,10 @@
                               <Tooltip text="进程要求运行的时间片数(1~256)" />
                            </tooltip>
                         </Spinner>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="单位：时间片" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="s">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Text>
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" GridPane.rowIndex="2">
@@ -177,7 +215,10 @@
                               <Tooltip text="进程要求占用的主存空间（1~MAX_MEM）" />
                            </tooltip>
                         </Spinner>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="单位：KByte" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="KByte">
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin></Text>
                      </children>
                   </HBox>
                </children>

@@ -12,17 +12,13 @@ import lombok.Setter;
 public class SimMemoryBlock
 {
     /**
-     * ID
-     */
-    private final int ID;
-    /**
      * 起始位置
      */
     private int startPos;
     /**
      * 终止位置
      */
-    private int stopPos;
+    private int endPos;
     /**
      * 总大小
      */
@@ -35,7 +31,7 @@ public class SimMemoryBlock
     public enum Status
     {
         IDLE,
-        USING,
+        INUSE,
         RESERVED
     }
 }

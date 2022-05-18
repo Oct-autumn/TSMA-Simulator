@@ -20,9 +20,13 @@ public class SimProcess
      */
     private final int PID;
     /**
-     * 需要运行的时间
+     * 需要运行的总时间（设为 -1 则一直运行）
      */
-    private int requireRunTime;
+    private int totalRunTime;
+    /**
+     * 已运行的时间
+     */
+    private int elapsedTime;
     /**
      * 优先级
      */
@@ -36,7 +40,7 @@ public class SimProcess
      */
     private Property property;
     /**
-     * 关联进程ID
+     * 关联进程ID（设为 -1 置空）
      */
     private int associatedPID;
     /**
@@ -44,7 +48,7 @@ public class SimProcess
      */
     private final int requireMemSize;
     /**
-     * 占用内存的起始位置
+     * 占用内存的起始位置（未分配则设为 -1）
      */
     private int memStartPos;
 
@@ -53,7 +57,9 @@ public class SimProcess
         BACK,
         READY,
         RUNNING,
-        HANGUP,
+        BLOCK,
+        SYS_HANGUP,
+        USER_HANGUP,
         REVOKE
     }
 

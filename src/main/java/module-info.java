@@ -8,4 +8,7 @@ module cn.octautumn.cpumemsimulation {
     opens cn.octautumn.tsmasimulator to javafx.fxml;
     exports cn.octautumn.tsmasimulator;
     exports cn.octautumn.tsmasimulator.model;
+    exports cn.octautumn.tsmasimulator.service;
+    exports cn.octautumn.tsmasimulator.SceneController;
+    opens cn.octautumn.tsmasimulator.SceneController to javafx.fxml;
 }

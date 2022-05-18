@@ -27,4 +27,8 @@ public class SimulatorConfig
      * 系统保留内存大小
      */
     public int systemReservedMemSize;
+    /**
+     * 时间片长度（单位：秒）
+     */
+    public int timeSliceLength;
 }

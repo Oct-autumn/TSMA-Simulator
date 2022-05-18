@@ -11,8 +11,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class SimProcessor
 {
+    /**
+     * 处理机ID
+     */
     private final int processorID;
+    /**
+     * 正在运行的进程id
+     */
     private int runningPID;
+    /**
+     * 状态
+     */
     private Status status;
 
     public enum Status
