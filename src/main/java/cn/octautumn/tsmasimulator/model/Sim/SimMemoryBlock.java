@@ -1,4 +1,4 @@
-package cn.octautumn.tsmasimulator.model;
+package cn.octautumn.tsmasimulator.model.Sim;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

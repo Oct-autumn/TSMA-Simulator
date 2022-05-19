@@ -25,13 +25,17 @@ public class ApplicationBoot extends Application
         CoreResource.mainStage.setScene(mainScene);
         CoreResource.mainSceneController = mainSceneLoader.getController();
 
+        CoreResource.mainStage.setOnCloseRequest(windowEvent -> {
+            System.exit(0);
+        });
+
         CoreResource.configStage = new Stage();
         CoreResource.configStage.getIcons().setAll(new Image(
                 Objects.requireNonNull(ApplicationBoot.class.getResourceAsStream("img/icon-main.png"))));
         CoreResource.configStage.setResizable(false);
         CoreResource.configStage.setTitle("模拟器设置");
         FXMLLoader configSceneLoader = new FXMLLoader(ApplicationBoot.class.getResource("config-view.fxml"));
-        Scene configScene = new Scene(configSceneLoader.load(), 350, 240);
+        Scene configScene = new Scene(configSceneLoader.load(), 350, 270);
         CoreResource.configStage.setScene(configScene);
         CoreResource.configStage.initOwner(stage);
         CoreResource.configStage.initModality(Modality.WINDOW_MODAL);

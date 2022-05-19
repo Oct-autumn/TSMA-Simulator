@@ -1,9 +1,6 @@
-package cn.octautumn.tsmasimulator.model;
+package cn.octautumn.tsmasimulator.model.Sim;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.ArrayList;
 
@@ -59,7 +56,7 @@ public class SimProcess
         BACK,
         READY,
         RUNNING,
-        BLOCK,
+        BLOCKED,
         SYS_HANGUP,
         USER_HANGUP,
         REVOKE

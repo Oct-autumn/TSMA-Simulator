@@ -19,6 +19,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
@@ -114,17 +115,23 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Text>
-            <Text fx:id="textMemStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="0KByte/0KByte" />
-            <ProgressBar prefHeight="20.0" prefWidth="700.0" progress="0.0">
+            <Text fx:id="textMemStatus" strokeType="OUTSIDE" strokeWidth="0.0" text="0Byte/0Byte" />
+            <HBox alignment="CENTER_LEFT" maxHeight="30.0" maxWidth="700.0" prefHeight="30.0" prefWidth="700.0" style="-fx-background-color: #FFFFFF; -fx-border-color: #A0A0A0;">
                <VBox.margin>
-                  <Insets bottom="3.0" top="3.0" />
+                  <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
                </VBox.margin>
-            </ProgressBar>
+               <children>
+                  <Rectangle fx:id="rectReservedMem" arcHeight="5.0" arcWidth="5.0" fill="GREY" height="30.0" stroke="BLACK" strokeType="INSIDE" width="5.0" />
+                  <Rectangle fx:id="rectActiveMem" arcHeight="5.0" arcWidth="5.0" fill="#5abc5c" height="30.0" stroke="BLACK" strokeType="INSIDE" width="5.0" />
+                  <Rectangle fx:id="rectInactiveMem" arcHeight="5.0" arcWidth="5.0" fill="#5476ef" height="30.0" stroke="BLACK" strokeType="INSIDE" width="5.0" />
+                  <Rectangle fx:id="rectIdleMem" arcHeight="5.0" arcWidth="5.0" fill="#80dbff" height="30.0" stroke="BLACK" strokeType="INSIDE" width="5.0" />
+               </children>
+            </HBox>
             <TableView fx:id="tViewMemBlockTable" prefHeight="200.0">
                <columns>
-                  <TableColumn fx:id="tcMemBlockStartPos" editable="false" prefWidth="150.0" resizable="false" text="起始位置（KByte）" />
-                  <TableColumn fx:id="tcMemBlockEndPos" editable="false" prefWidth="150.0" resizable="false" text="结束位置（KByte）" />
-                  <TableColumn fx:id="tcMemBlockSize" editable="false" prefWidth="100.0" resizable="false" text="大小（KByte）" />
+                  <TableColumn fx:id="tcMemBlockStartPos" editable="false" prefWidth="150.0" resizable="false" text="起始位置（Byte）" />
+                  <TableColumn fx:id="tcMemBlockEndPos" editable="false" prefWidth="150.0" resizable="false" text="结束位置（Byte）" />
+                  <TableColumn fx:id="tcMemBlockSize" editable="false" prefWidth="100.0" resizable="false" text="大小（Byte）" />
                   <TableColumn fx:id="tcMemBlockStatus" editable="false" resizable="false" text="状态" />
                </columns>
             </TableView>
@@ -220,7 +227,7 @@
                               <Tooltip text="进程要求占用的主存空间（1~MAX_MEM）" />
                            </tooltip>
                         </Spinner>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="KByte">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Byte">
                            <HBox.margin>
                               <Insets left="5.0" />
                            </HBox.margin></Text>

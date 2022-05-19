@@ -2,9 +2,6 @@ package cn.octautumn.tsmasimulator;
 
 import cn.octautumn.tsmasimulator.SceneController.ConfigSceneController;
 import cn.octautumn.tsmasimulator.SceneController.MainSceneController;
-import cn.octautumn.tsmasimulator.model.SimMemoryBlock;
-import cn.octautumn.tsmasimulator.model.SimProcess;
-import cn.octautumn.tsmasimulator.model.SimProcessor;
 import cn.octautumn.tsmasimulator.service.MemoryService;
 import cn.octautumn.tsmasimulator.service.ProcessService;
 import cn.octautumn.tsmasimulator.service.ProcessorService;
@@ -13,7 +10,8 @@ import javafx.stage.Stage;
 public class CoreResource
 {
     public static final SimulatorConfig simulatorConfig =
-            new SimulatorConfig(2, 4, 2048, 128, 5);
+            new SimulatorConfig(2, 4, 2048, 128, 5, 100);
+    public static final ProcessorService processorService = new ProcessorService();
     public static final MemoryService memoryService = new MemoryService();
     public static final ProcessService processService = new ProcessService();
 
@@ -28,14 +26,7 @@ public class CoreResource
     public static void resetSimulator()
     {
         //重置处理机列表
-        ProcessorService.processorList.clear();
-        for (int i = 0; i < simulatorConfig.getProcessorCount(); i++)
-            ProcessorService.processorList.add(SimProcessor.builder()
-                    .processorID(i)
-                    .runningPID(-1)
-                    .status(SimProcessor.Status.IDLE)
-                    .timeSliceEla(0)
-                    .build());
+        processorService.reset();
 
         //重置内存分块列表
         memoryService.reset();

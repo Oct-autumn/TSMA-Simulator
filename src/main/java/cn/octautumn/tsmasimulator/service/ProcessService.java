@@ -1,20 +1,18 @@
 package cn.octautumn.tsmasimulator.service;
 
 import cn.octautumn.tsmasimulator.CoreResource;
-import cn.octautumn.tsmasimulator.model.SimMemoryBlock;
-import cn.octautumn.tsmasimulator.model.SimProcess;
+import cn.octautumn.tsmasimulator.model.Sim.SimMemoryBlock;
+import cn.octautumn.tsmasimulator.model.Sim.SimProcess;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Synchronized;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ProcessService
 {
@@ -38,16 +36,14 @@ public class ProcessService
                 {
                     super.add(i, pid);
                     return true;
-                }
-                else if (priority0 == priority)
+                } else if (priority0 == priority)
                     if (pid > this.get(i))
                     {
                         super.add(i, pid);
                         return true;
                     }
             }
-
-            return false;
+            return super.add(pid);
         }
     }
 
@@ -68,6 +64,7 @@ public class ProcessService
 
     public void reset()
     {
+        pidNum = 0;
         processMap.clear();
         backPL.clear();
         blockPL.clear();
@@ -77,12 +74,11 @@ public class ProcessService
         runningPL.clear();
         //测试进程
         createNewProcess("测试进程",
-                30, 20,
+                10000, 20,
                 SimProcess.Property.INDEPENDENT,
                 null,
                 CoreResource.simulatorConfig.getSystemReservedMemSize()
         );
-        CoreResource.mainSceneController.refreshTViewThreadTable();
     }
 
     /**
@@ -139,7 +135,7 @@ public class ProcessService
                 .build();
         pidNum++;
 
-        if (readyPL.size() < CoreResource.simulatorConfig.getMaxReadyProcess())
+        if (readyPL.size() + runningPL.size() < CoreResource.simulatorConfig.getMaxReadyProcess())
         {
             //就绪队列不满，尝试为其分配内存
             int memStartPos = CoreResource.memoryService.allocMemBlock(requireMemSize, SimMemoryBlock.Status.ACTIVE);
@@ -162,21 +158,142 @@ public class ProcessService
                     }
                 }
                 if (newProcess.getStatus() != SimProcess.Status.READY)
+                {
                     newProcess.setStatus(SimProcess.Status.BACK);   //仍没有成功分配内存，进入后备队列
+                    newProcess.setMemStartPos(-1);
+                }
             }
         } else
+        {
             newProcess.setStatus(SimProcess.Status.BACK);   //就绪队列已满，进入后备队列
+            newProcess.setMemStartPos(-1);
+        }
 
         processMap.put(newProcess.getPID(), newProcess);
 
         if (newProcess.getStatus() == SimProcess.Status.READY)
+        {
             readyPL.add(newProcess.getPID());
-        else if (newProcess.getStatus() == SimProcess.Status.BACK)
+            //尝试抢占处理机
+            CoreResource.processorService.tryToPreemptProcessor(newProcess);
+        } else if (newProcess.getStatus() == SimProcess.Status.BACK)
             backPL.add(newProcess.getPID());
 
 
         CoreResource.mainSceneController.refreshTViewThreadTable();
         return this.pidNum - 1;
+    }
+
+    /**
+     * 检查就绪进程是否符合运行条件
+     *
+     * @param pid 进程id
+     * @return 是否符合
+     */
+    public boolean tryToRunReadyProcess(Integer pid)
+    {
+        SimProcess thisProcess = processMap.get(pid);
+        if (thisProcess.getStatus() != SimProcess.Status.READY || runningPL.contains(pid))
+            return false;
+
+        //检查进程属性,若为后继进程则检查前驱进程是否均已完成
+        if (thisProcess.getProperty() == SimProcess.Property.SYNCHRONIZE_SUC)
+        {
+            for (int assocPid : thisProcess.getAssociatedPidList())
+                if (processMap.get(assocPid).getStatus() != SimProcess.Status.REVOKE)
+                {
+                    //有前驱进程未完成，该进程阻塞
+                    thisProcess.setStatus(SimProcess.Status.BLOCKED);
+                    CoreResource.memoryService.findMemBlock(thisProcess.getMemStartPos()).setStatus(SimMemoryBlock.Status.INACTIVE);
+                    readyPL.remove((Integer) thisProcess.getPID());
+                    blockPL.add(thisProcess.getPID());
+                    CoreResource.mainSceneController.refreshTViewThreadTable();
+                    CoreResource.mainSceneController.refreshMemBlockVis();
+                    return false;
+                }
+        }
+
+        thisProcess.setStatus(SimProcess.Status.RUNNING);
+        readyPL.remove((Integer) thisProcess.getPID());
+        runningPL.add(thisProcess.getPID());
+
+        CoreResource.mainSceneController.refreshTViewThreadTable();
+        return true;
+    }
+
+    /**
+     * 进程运行完毕，回到就绪状态（已完成的进程将标记为已完成）
+     *
+     * @param pid 进程id
+     */
+    public void processRunOver(Integer pid)
+    {
+        SimProcess thisProcess = processMap.get(pid);
+        if (thisProcess.getStatus() != SimProcess.Status.RUNNING)
+            return;
+
+        if (thisProcess.getElapsedTime() >= thisProcess.getTotalRunTime())
+        {
+            //运行完成
+            thisProcess.setStatus(SimProcess.Status.REVOKE);
+            CoreResource.memoryService.freeMemBlock(thisProcess.getMemStartPos());
+            runningPL.remove((Integer) thisProcess.getPID());
+            finishPL.add(thisProcess.getPID());
+
+            for (int i = 0; i < blockPL.size(); i++)
+            {
+                if (readyPL.size() + runningPL.size() >= CoreResource.simulatorConfig.getMaxReadyProcess())
+                    break;
+                if (processMap.get(blockPL.get(i)).getStatus() == SimProcess.Status.BLOCKED)
+                    if (tryToReadyBlockedProcess(blockPL.get(i))) i = 0;
+            }
+
+            for (int i = 0; i < hangPL.size(); i++)
+            {
+                if (readyPL.size() + runningPL.size() >= CoreResource.simulatorConfig.getMaxReadyProcess())
+                    break;
+                if (processMap.get(hangPL.get(i)).getStatus() == SimProcess.Status.SYS_HANGUP)
+                    if (tryToUnHangingProcess(hangPL.get(i))) i = 0;
+            }
+
+            CoreResource.mainSceneController.refreshTViewThreadTable();
+            return;
+        }
+
+        thisProcess.setStatus(SimProcess.Status.READY);
+        runningPL.remove((Integer) thisProcess.getPID());
+        readyPL.add(thisProcess.getPID());
+        CoreResource.mainSceneController.refreshTViewThreadTable();
+    }
+
+    /**
+     * 尝试就绪一个阻塞进程
+     *
+     * @param pid 进程id
+     * @return 是否成功
+     */
+    public boolean tryToReadyBlockedProcess(Integer pid)
+    {
+        SimProcess thisProcess = processMap.get(pid);
+        if (thisProcess.getStatus() != SimProcess.Status.BLOCKED)
+            return false;
+
+        //检查进程属性,若为后继进程则检查前驱进程是否均已完成
+        if (thisProcess.getProperty() == SimProcess.Property.SYNCHRONIZE_SUC)
+        {
+            for (int assocPid : thisProcess.getAssociatedPidList())
+                if (processMap.get(assocPid).getStatus() != SimProcess.Status.REVOKE)
+                    return false;   //有前驱进程未完成，维持阻塞
+        }
+
+        thisProcess.setStatus(SimProcess.Status.READY);
+        CoreResource.memoryService.findMemBlock(thisProcess.getMemStartPos()).setStatus(SimMemoryBlock.Status.ACTIVE);
+        blockPL.remove((Integer) thisProcess.getPID());
+        readyPL.add(thisProcess.getPID());
+        //尝试抢占处理机
+        CoreResource.processorService.tryToPreemptProcessor(thisProcess);
+        CoreResource.mainSceneController.refreshTViewThreadTable();
+        return true;
     }
 
     /**
@@ -192,12 +309,15 @@ public class ProcessService
         SimProcess thisProcess = processMap.get(pid);
         switch (thisProcess.getStatus())
         {
-            case BLOCK ->
+            case BLOCKED ->
             {
                 thisProcess.setStatus(SimProcess.Status.SYS_HANGUP);
-                CoreResource.memoryService.freeMemBlock(thisProcess.getMemStartPos());
-                thisProcess.setMemStartPos(-1);
-                blockPL.remove(thisProcess.getPID());
+                if (thisProcess.getMemStartPos() != -1)
+                {//回收分配的内存
+                    CoreResource.memoryService.freeMemBlock(thisProcess.getMemStartPos());
+                    thisProcess.setMemStartPos(-1);
+                }
+                blockPL.remove((Integer) thisProcess.getPID());
                 hangPL.add(thisProcess.getPID());
             }
             case USER_HANGUP -> thisProcess.setStatus(SimProcess.Status.SYS_HANGUP);
@@ -240,10 +360,10 @@ public class ProcessService
                 CoreResource.memoryService.freeMemBlock(thisProcess.getMemStartPos());
                 thisProcess.setMemStartPos(-1);
                 runningPL.remove((Integer) thisProcess.getPID());
-                // TODO 从处理机上撤下
+                CoreResource.processorService.removeProcessFromProcessor(thisProcess.getPID()); //从处理机上撤除
                 hangPL.add(thisProcess.getPID());
             }
-            case BLOCK ->
+            case BLOCKED ->
             {
                 thisProcess.setStatus(SimProcess.Status.USER_HANGUP);
                 CoreResource.memoryService.freeMemBlock(thisProcess.getMemStartPos());
@@ -277,34 +397,37 @@ public class ProcessService
         {
             case SYS_HANGUP, USER_HANGUP ->
             {
-                switch (thisProcess.getProperty())
+                //检查进程属性,若为后继进程则检查前驱进程是否均已完成
+                if (thisProcess.getProperty() == SimProcess.Property.SYNCHRONIZE_SUC)
                 {
+                    for (int assocPid : thisProcess.getAssociatedPidList())
+                    {
+                        if (processMap.get(assocPid).getStatus() != SimProcess.Status.REVOKE)
+                            return false;
+                    }
+                }
 
-                    case INDEPENDENT ->
-                    {
-                    }
-                    case SYNCHRONIZE_SUC ->
-                    {
-                        //检查前驱进程是否均已完成
-                        for (int assocPid : thisProcess.getAssociatedPidList())
-                        {
-                            if (processMap.get(assocPid).getStatus() != SimProcess.Status.REVOKE)
-                                return false;
-                        }
-                    }
+                if (readyPL.size() + runningPL.size() >= CoreResource.simulatorConfig.getMaxReadyProcess())
+                {
+                    sysHangupProcess(thisProcess.getPID());  //转为系统挂起
+                    return false;
                 }
 
                 int memStartPos = CoreResource.memoryService.allocMemBlock(thisProcess.getRequireMemSize(), SimMemoryBlock.Status.ACTIVE);
                 if (memStartPos == -1)
                     if (thisProcess.getStatus() == SimProcess.Status.USER_HANGUP)
-                        return sysHangupProcess(thisProcess.getPID());  //用户挂起转为系统挂起
-                    else
+                    {
+                        sysHangupProcess(thisProcess.getPID());  //转为系统挂起
+                        return false;
+                    } else
                         return false;   //解挂失败
 
                 thisProcess.setStatus(SimProcess.Status.READY);
                 thisProcess.setMemStartPos(memStartPos);
                 hangPL.remove((Integer) thisProcess.getPID());
                 readyPL.add(thisProcess.getPID());
+                //尝试抢占处理机
+                CoreResource.processorService.tryToPreemptProcessor(thisProcess);
             }
 
             default ->
@@ -334,11 +457,6 @@ public class ProcessService
         return true;
     }
 
-    public boolean runProcess(Integer pid)
-    {
-        return true;
-    }
-
     /**
      * 获取pid列表
      *
@@ -353,4 +471,6 @@ public class ProcessService
 
         return optionalPidList;
     }
+
+
 }

@@ -2,13 +2,14 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="350.0" spacing="10.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.octautumn.tsmasimulator.SceneController.ConfigSceneController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="270.0" prefWidth="350.0" spacing="10.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cn.octautumn.tsmasimulator.SceneController.ConfigSceneController">
    <children>
       <HBox alignment="CENTER_LEFT">
          <children>
@@ -26,7 +27,7 @@
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="总模拟内存：" />
             <Spinner fx:id="spinnerTotalMemorySize" editable="true" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="KByte">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Byte">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
@@ -37,7 +38,7 @@
          <children>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="系统进程占用内存：" />
             <Spinner fx:id="spinnerSystemReservedMemSize" editable="true" />
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="KByte">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Byte">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>
@@ -50,6 +51,17 @@
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="时间片长度：" />
             <Spinner fx:id="spinnerTimeSliceLength" editable="true" />
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="s">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Text>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER_LEFT">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="模拟步长：" />
+            <ChoiceBox fx:id="cbTimeStepLength" prefWidth="100.0" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="ms">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin>

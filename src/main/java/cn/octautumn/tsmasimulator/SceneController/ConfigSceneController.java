@@ -1,6 +1,7 @@
 package cn.octautumn.tsmasimulator.SceneController;
 
 import cn.octautumn.tsmasimulator.CoreResource;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -16,6 +17,7 @@ public class ConfigSceneController implements Initializable
     public Spinner<Integer> spinnerTotalMemorySize;
     public Spinner<Integer> spinnerSystemReservedMemSize;
     public Spinner<Integer> spinnerTimeSliceLength;
+    public ChoiceBox<Integer> cbTimeStepLength;
 
     public void saveConfig()
     {
@@ -24,8 +26,10 @@ public class ConfigSceneController implements Initializable
         CoreResource.simulatorConfig.setTotalMemorySize(spinnerTotalMemorySize.getValue());
         CoreResource.simulatorConfig.setSystemReservedMemSize(spinnerSystemReservedMemSize.getValue());
         CoreResource.simulatorConfig.setTimeSliceLength(spinnerTimeSliceLength.getValue());
+        CoreResource.simulatorConfig.setTimeStepLength(cbTimeStepLength.getValue());
 
         CoreResource.configStage.hide();
+        CoreResource.resetSimulator();
     }
 
     public void cancelEdit()
@@ -54,17 +58,19 @@ public class ConfigSceneController implements Initializable
         spinnerTotalMemorySize.getValueFactory().setValue(CoreResource.simulatorConfig.getTotalMemorySize());
         spinnerSystemReservedMemSize.getValueFactory().setValue(CoreResource.simulatorConfig.getSystemReservedMemSize());
         spinnerTimeSliceLength.getValueFactory().setValue(CoreResource.simulatorConfig.getTimeSliceLength());
+        cbTimeStepLength.setValue(CoreResource.simulatorConfig.getTimeStepLength());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)
     {
         spinnerProcessorCount.setDisable(true);
-        spinnerProcessorCount.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 16, 2));
-        spinnerMaxReadyProcess.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 16, 0));
-        spinnerTotalMemorySize.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65536, 2048));
-        spinnerSystemReservedMemSize.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65536, 128));
-        spinnerTimeSliceLength.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 60, 5));
+        spinnerProcessorCount.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 16));
+        spinnerMaxReadyProcess.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 16));
+        spinnerTotalMemorySize.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65536));
+        spinnerSystemReservedMemSize.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 65536));
+        spinnerTimeSliceLength.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 60));
+        cbTimeStepLength.setItems(FXCollections.observableArrayList(10,25,50,100,200,500,1000));
 
         spinnerTotalMemorySize.valueProperty().addListener((observableValue, integer, t1) ->
                 ((SpinnerValueFactory.IntegerSpinnerValueFactory) spinnerSystemReservedMemSize.getValueFactory()).setMax(t1));

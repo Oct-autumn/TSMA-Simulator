@@ -1,8 +1,7 @@
 package cn.octautumn.tsmasimulator.service;
 
 import cn.octautumn.tsmasimulator.CoreResource;
-import cn.octautumn.tsmasimulator.model.SimMemoryBlock;
-import cn.octautumn.tsmasimulator.model.SimProcess;
+import cn.octautumn.tsmasimulator.model.Sim.SimMemoryBlock;
 
 import java.util.ArrayList;
 
@@ -60,7 +59,7 @@ public class MemoryService
         if (nextMergeBlock != null) memoryBlockList.remove(nextMergeBlock);
         thisMemoryBlock.setStatus(SimMemoryBlock.Status.IDLE);
 
-        CoreResource.mainSceneController.refreshTViewMemBlockTable();
+        CoreResource.mainSceneController.refreshMemBlockVis();
     }
 
     /**
@@ -94,7 +93,7 @@ public class MemoryService
                     thisMemoryBlock.setTotalSize(thisMemoryBlock.getTotalSize() - requireSize);
                     ret = memoryBlockList.get(i).getStartPos();
                 }
-                CoreResource.mainSceneController.refreshTViewMemBlockTable();
+                CoreResource.mainSceneController.refreshMemBlockVis();
                 return ret;
             }
         }

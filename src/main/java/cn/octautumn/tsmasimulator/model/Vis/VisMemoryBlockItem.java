@@ -1,5 +1,6 @@
-package cn.octautumn.tsmasimulator.model;
+package cn.octautumn.tsmasimulator.model.Vis;
 
+import cn.octautumn.tsmasimulator.model.Sim.SimMemoryBlock;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -31,4 +31,8 @@ public class SimulatorConfig
      * 时间片长度（单位：秒）
      */
     public int timeSliceLength;
+    /**
+     * 模拟步长（单位：毫秒）
+     */
+    public int timeStepLength;
 }

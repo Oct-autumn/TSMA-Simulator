@@ -1,32 +1,45 @@
 package cn.octautumn.tsmasimulator.SceneController;
 
 import cn.octautumn.tsmasimulator.CoreResource;
-import cn.octautumn.tsmasimulator.SimulatorRun;
-import cn.octautumn.tsmasimulator.model.SimMemoryBlock;
-import cn.octautumn.tsmasimulator.model.SimProcess;
-import cn.octautumn.tsmasimulator.model.VisMemoryBlockItem;
-import cn.octautumn.tsmasimulator.model.VisProcessItem;
+import cn.octautumn.tsmasimulator.model.Sim.SimMemoryBlock;
+import cn.octautumn.tsmasimulator.model.Sim.SimProcess;
+import cn.octautumn.tsmasimulator.model.Vis.VisMemoryBlockItem;
+import cn.octautumn.tsmasimulator.model.Vis.VisProcessItem;
+import cn.octautumn.tsmasimulator.model.Vis.VisProcessorItem;
 import cn.octautumn.tsmasimulator.service.MemoryService;
-import cn.octautumn.tsmasimulator.service.ProcessService;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable
 {
     public Button btnToggleSimulation;
     public Label processorStatus1;
+    public ProgressBar pbTimeSliceProgress1;
+    public ProgressBar pbProcessProgress1;
+    public Label lbTimeSliceProgress1;
+    public Label lbProcessProgress1;
     public Label processorStatus2;
-    public Text textMemStatus;
-    //public HBox hBoxMemStatusBar;
+    public ProgressBar pbTimeSliceProgress2;
+    public ProgressBar pbProcessProgress2;
+    public Label lbTimeSliceProgress2;
+    public Label lbProcessProgress2;
 
+    public Text textMemStatus;
+    public Rectangle rectReservedMem;
+    public Rectangle rectActiveMem;
+    public Rectangle rectInactiveMem;
+    public Rectangle rectIdleMem;
     public TableView<VisMemoryBlockItem> tViewMemBlockTable;
     public TableColumn<VisMemoryBlockItem, String> tcMemBlockStartPos;
     public TableColumn<VisMemoryBlockItem, String> tcMemBlockEndPos;
@@ -51,24 +64,33 @@ public class MainSceneController implements Initializable
     public ChoiceBox<Integer> cbAssociatedPID;
     public Spinner<Integer> spinnerRequireMemSize;
 
+
+
     private final ObservableList<VisProcessItem> visProcessItemList = FXCollections.observableArrayList();
     private final ObservableList<VisMemoryBlockItem> visMemoryBlockItemList = FXCollections.observableArrayList();
-    private final SimulatorRun simulator = new SimulatorRun();
 
     public void showSettingDialog()
     {
+        if (btnToggleSimulation.getText().equals("暂停模拟"))
+        {
+            stopSimulation();
+        }
         CoreResource.configSceneController.initializeControls();
         CoreResource.configStage.show();
     }
 
     public void resetSimulator()
     {
+        if (btnToggleSimulation.getText().equals("暂停模拟"))
+        {
+            stopSimulation();
+        }
         CoreResource.resetSimulator();
     }
 
     public void startSimulation()
     {
-        simulator.start();
+        CoreResource.processorService.start();
 
         btnToggleSimulation.setText("暂停模拟");
         btnToggleSimulation.setOnAction((actionEvent) -> stopSimulation());
@@ -76,7 +98,7 @@ public class MainSceneController implements Initializable
 
     public void stopSimulation()
     {
-        simulator.stop();
+        CoreResource.processorService.stop();
 
         btnToggleSimulation.setText("开始模拟");
         btnToggleSimulation.setOnAction((actionEvent) -> startSimulation());
@@ -84,7 +106,7 @@ public class MainSceneController implements Initializable
 
     public void nextTimeStep()
     {
-        simulator.nextTimeStep();
+        //CoreResource.processorService.nextTimeStep();
     }
 
     public void addNewProcess()
@@ -106,7 +128,7 @@ public class MainSceneController implements Initializable
 
             CoreResource.processService.createNewProcess(
                     tfThreadName.getText(),
-                    spinnerRequireRunTime.getValue(),
+                    spinnerRequireRunTime.getValue() * 1000,
                     spinnerPriority.getValue(),
                     SimProcess.Property.SYNCHRONIZE_SUC,
                     assocPidList,
@@ -116,7 +138,7 @@ public class MainSceneController implements Initializable
         {
             CoreResource.processService.createNewProcess(
                     tfThreadName.getText(),
-                    spinnerRequireRunTime.getValue(),
+                    spinnerRequireRunTime.getValue() * 1000,
                     spinnerPriority.getValue(),
                     SimProcess.Property.INDEPENDENT,
                     null,
@@ -136,7 +158,8 @@ public class MainSceneController implements Initializable
     {
         spinnerRequireRunTime.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 256, 1));
         spinnerPriority.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 256, 0));
-        spinnerRequireMemSize.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, CoreResource.simulatorConfig.getTotalMemorySize(), 1));
+        spinnerRequireMemSize.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1,
+                CoreResource.simulatorConfig.getTotalMemorySize() - CoreResource.simulatorConfig.getSystemReservedMemSize(), 1));
         rbIndependent.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
             if (t1)
             {
@@ -153,8 +176,6 @@ public class MainSceneController implements Initializable
             }
         });
 
-        //tViewMemBlockTable.sc
-
         tcMemBlockStartPos.setCellValueFactory(new PropertyValueFactory<>("startPos"));
         tcMemBlockEndPos.setCellValueFactory(new PropertyValueFactory<>("endPos"));
         tcMemBlockSize.setCellValueFactory(new PropertyValueFactory<>("totalSize"));
@@ -170,21 +191,67 @@ public class MainSceneController implements Initializable
         tcToggleProcessHang.setCellValueFactory(new PropertyValueFactory<>("toggleHangButton"));
     }
 
-    public void refreshTViewThreadTable()
+    public void refreshProcessorVis()
     {
-        tViewThreadTable.getItems().clear();
-        visProcessItemList.clear();
-        CoreResource.processService.getProcessMap().forEach((integer, simProcess) ->
-                visProcessItemList.add(new VisProcessItem(simProcess)));
-        tViewThreadTable.setItems(visProcessItemList);
+        Platform.runLater(() -> {
+            VisProcessorItem vis1 = new VisProcessorItem(CoreResource.processorService.processorMap.get(0));
+            processorStatus1.setText(vis1.getStatusInfo());
+            pbTimeSliceProgress1.setProgress(vis1.getTimeSlicePercentage());
+            pbProcessProgress1.setProgress(vis1.getProcessRunTimePercentage());
+            lbTimeSliceProgress1.setText(String.format("%.2f%%", vis1.getTimeSlicePercentage() * 100));
+            lbProcessProgress1.setText(String.format("%.2f%%", vis1.getProcessRunTimePercentage() * 100));
+
+            VisProcessorItem vis2 = new VisProcessorItem(CoreResource.processorService.processorMap.get(1));
+            processorStatus2.setText(vis2.getStatusInfo());
+            pbTimeSliceProgress2.setProgress(vis2.getTimeSlicePercentage());
+            pbProcessProgress2.setProgress(vis2.getProcessRunTimePercentage());
+            lbTimeSliceProgress2.setText(String.format("%.2f%%", vis2.getTimeSlicePercentage() * 100));
+            lbProcessProgress2.setText(String.format("%.2f%%", vis2.getProcessRunTimePercentage() * 100));
+        });
     }
 
-    public void refreshTViewMemBlockTable()
+    public void refreshMemBlockVis()
     {
-        tViewMemBlockTable.getItems().clear();
-        visMemoryBlockItemList.clear();
-        for (SimMemoryBlock it : MemoryService.memoryBlockList)
-            visMemoryBlockItemList.add(new VisMemoryBlockItem(it));
-        tViewMemBlockTable.setItems(visMemoryBlockItemList);
+        Platform.runLater(() -> {
+            int totalMemSize = CoreResource.simulatorConfig.getTotalMemorySize();
+            int idleMemSize = 0;
+            int activeMemSize = 0;
+            int inactiveMemSize = 0;
+            int reservedMemSize = 0;
+            for (SimMemoryBlock it : MemoryService.memoryBlockList)
+            {
+                switch (it.getStatus())
+                {
+                    case IDLE -> idleMemSize += it.getTotalSize();
+                    case ACTIVE -> activeMemSize += it.getTotalSize();
+                    case INACTIVE -> inactiveMemSize += it.getTotalSize();
+                    case RESERVED -> reservedMemSize += it.getTotalSize();
+                }
+            }
+
+            textMemStatus.setText(String.format("%dByte/%dByte", totalMemSize - idleMemSize, totalMemSize));
+
+            rectReservedMem.setWidth(((double) reservedMemSize / totalMemSize) * 700);
+            rectActiveMem.setWidth(((double) activeMemSize / totalMemSize) * 700);
+            rectInactiveMem.setWidth(((double) inactiveMemSize / totalMemSize) * 700);
+            rectIdleMem.setWidth(((double) idleMemSize / totalMemSize) * 700);
+
+            tViewMemBlockTable.getItems().clear();
+            visMemoryBlockItemList.clear();
+            for (SimMemoryBlock it : MemoryService.memoryBlockList)
+                visMemoryBlockItemList.add(new VisMemoryBlockItem(it));
+            tViewMemBlockTable.setItems(visMemoryBlockItemList);
+        });
+    }
+
+    public void refreshTViewThreadTable()
+    {
+        Platform.runLater(() -> {
+            tViewThreadTable.getItems().clear();
+            visProcessItemList.clear();
+            CoreResource.processService.getProcessMap().forEach((integer, simProcess) ->
+                    visProcessItemList.add(new VisProcessItem(simProcess)));
+            tViewThreadTable.setItems(visProcessItemList);
+        });
     }
 }
