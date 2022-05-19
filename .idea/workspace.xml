@@ -4,26 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b4093ca3-4585-4d0b-943e-8e452b9bd0bc" name="变更" comment="Dev upload 20220519#3">
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/Sim/SimProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/Vis/VisProcessorItem.java" afterDir="false" />
+    <list default="true" id="b4093ca3-4585-4d0b-943e-8e452b9bd0bc" name="变更" comment="Dev upload 20220520#1&#10;第一个勉强能用的版本">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ApplicationBoot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ApplicationBoot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/CoreResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/CoreResource.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/ConfigSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/ConfigSceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/MainSceneController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SimulatorConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SimulatorConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SimulatorRun.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimMemoryBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/Sim/SimMemoryBlock.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/Sim/SimProcess.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcessor.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/VisMemoryBlockItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/Vis/VisMemoryBlockItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/VisProcessItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/Vis/VisProcessItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/MemoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/MemoryService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessorService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessorService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/config-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/config-view.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -96,7 +80,7 @@
       <workItem from="1652765192048" duration="7515000" />
       <workItem from="1652779794401" duration="5053000" />
       <workItem from="1652840408623" duration="36897000" />
-      <workItem from="1652930469265" duration="47673000" />
+      <workItem from="1652930469265" duration="48716000" />
     </task>
     <task id="LOCAL-00001" summary="Dev upload 20220519#1">
       <created>1652899347387</created>
@@ -119,7 +103,14 @@
       <option name="project" value="LOCAL" />
       <updated>1652953209887</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Dev upload 20220520#1&#10;第一个勉强能用的版本">
+      <created>1652983984906</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1652983984906</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,7 +143,8 @@
     <MESSAGE value="Dev upload 20220519#1" />
     <MESSAGE value="Dev upload 20220519#2" />
     <MESSAGE value="Dev upload 20220519#3" />
-    <option name="LAST_COMMIT_MESSAGE" value="Dev upload 20220519#3" />
+    <MESSAGE value="Dev upload 20220520#1&#10;第一个勉强能用的版本" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dev upload 20220520#1&#10;第一个勉强能用的版本" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -65,7 +65,6 @@ public class MainSceneController implements Initializable
     public Spinner<Integer> spinnerRequireMemSize;
 
 
-
     private final ObservableList<VisProcessItem> visProcessItemList = FXCollections.observableArrayList();
     private final ObservableList<VisMemoryBlockItem> visMemoryBlockItemList = FXCollections.observableArrayList();
 
@@ -86,6 +85,9 @@ public class MainSceneController implements Initializable
             stopSimulation();
         }
         CoreResource.resetSimulator();
+        refreshProcessorVis();
+        refreshMemBlockVis();
+        refreshTViewThreadTable();
     }
 
     public void startSimulation()
@@ -198,15 +200,27 @@ public class MainSceneController implements Initializable
             processorStatus1.setText(vis1.getStatusInfo());
             pbTimeSliceProgress1.setProgress(vis1.getTimeSlicePercentage());
             pbProcessProgress1.setProgress(vis1.getProcessRunTimePercentage());
-            lbTimeSliceProgress1.setText(String.format("%.2f%%", vis1.getTimeSlicePercentage() * 100));
-            lbProcessProgress1.setText(String.format("%.2f%%", vis1.getProcessRunTimePercentage() * 100));
+            if (vis1.getTimeSlicePercentage() == 0)
+                lbTimeSliceProgress1.setText("--");
+            else
+                lbTimeSliceProgress1.setText(String.format("%.2f%%", vis1.getTimeSlicePercentage() * 100));
+            if (vis1.getProcessRunTimePercentage() == 0)
+                lbProcessProgress1.setText("--");
+            else
+                lbProcessProgress1.setText(String.format("%.2f%%", vis1.getProcessRunTimePercentage() * 100));
 
             VisProcessorItem vis2 = new VisProcessorItem(CoreResource.processorService.processorMap.get(1));
             processorStatus2.setText(vis2.getStatusInfo());
             pbTimeSliceProgress2.setProgress(vis2.getTimeSlicePercentage());
             pbProcessProgress2.setProgress(vis2.getProcessRunTimePercentage());
-            lbTimeSliceProgress2.setText(String.format("%.2f%%", vis2.getTimeSlicePercentage() * 100));
-            lbProcessProgress2.setText(String.format("%.2f%%", vis2.getProcessRunTimePercentage() * 100));
+            if (vis2.getTimeSlicePercentage() == 0)
+                lbTimeSliceProgress2.setText("--");
+            else
+                lbTimeSliceProgress2.setText(String.format("%.2f%%", vis2.getTimeSlicePercentage() * 100));
+            if (vis2.getProcessRunTimePercentage() == 0)
+                lbProcessProgress2.setText("--");
+            else
+                lbProcessProgress2.setText(String.format("%.2f%%", vis2.getProcessRunTimePercentage() * 100));
         });
     }
 
@@ -229,7 +243,7 @@ public class MainSceneController implements Initializable
                 }
             }
 
-            textMemStatus.setText(String.format("%dByte/%dByte", totalMemSize - idleMemSize, totalMemSize));
+            textMemStatus.setText(String.format("%dByte / %dByte", totalMemSize - idleMemSize, totalMemSize));
 
             rectReservedMem.setWidth(((double) reservedMemSize / totalMemSize) * 700);
             rectActiveMem.setWidth(((double) activeMemSize / totalMemSize) * 700);

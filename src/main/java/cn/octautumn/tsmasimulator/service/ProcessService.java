@@ -72,13 +72,13 @@ public class ProcessService
         finishPL.clear();
         readyPL.clear();
         runningPL.clear();
-        //测试进程
-        createNewProcess("测试进程",
-                10000, 20,
-                SimProcess.Property.INDEPENDENT,
-                null,
-                CoreResource.simulatorConfig.getSystemReservedMemSize()
-        );
+//        //测试进程
+//        createNewProcess("测试进程",
+//                10000, 20,
+//                SimProcess.Property.INDEPENDENT,
+//                null,
+//                CoreResource.simulatorConfig.getSystemReservedMemSize()
+//        );
     }
 
     /**
