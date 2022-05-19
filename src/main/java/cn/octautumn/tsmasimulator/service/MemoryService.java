@@ -2,6 +2,7 @@ package cn.octautumn.tsmasimulator.service;
 
 import cn.octautumn.tsmasimulator.CoreResource;
 import cn.octautumn.tsmasimulator.model.SimMemoryBlock;
+import cn.octautumn.tsmasimulator.model.SimProcess;
 
 import java.util.ArrayList;
 
@@ -9,6 +10,18 @@ public class MemoryService
 {
 
     public static final ArrayList<SimMemoryBlock> memoryBlockList = new ArrayList<>();
+
+    public void reset()
+    {
+        memoryBlockList.clear();
+        memoryBlockList.add(SimMemoryBlock.builder()
+                .startPos(0)
+                .endPos(CoreResource.simulatorConfig.getTotalMemorySize() - 1)
+                .totalSize(CoreResource.simulatorConfig.getTotalMemorySize())
+                .status(SimMemoryBlock.Status.IDLE)
+                .build());
+        allocMemBlock(CoreResource.simulatorConfig.getSystemReservedMemSize(), SimMemoryBlock.Status.RESERVED);
+    }
 
     /**
      * 释放内存块（会合并空闲内存块）
@@ -68,7 +81,7 @@ public class MemoryService
                 int ret;
                 if (thisMemoryBlock.getTotalSize() == requireSize)
                 {
-                    thisMemoryBlock.setStatus(SimMemoryBlock.Status.INUSE);
+                    thisMemoryBlock.setStatus(SimMemoryBlock.Status.ACTIVE);
                     ret = thisMemoryBlock.getStartPos();
                 } else
                 {
@@ -88,11 +101,30 @@ public class MemoryService
         return -1;
     }
 
+    /**
+     * 通过起始位置查找内存块
+     * @param startPos 内存块的起始位置
+     * @return 内存块实例
+     */
     public SimMemoryBlock findMemBlock(Integer startPos)
     {
         for (SimMemoryBlock it : memoryBlockList)
         {
             if (it.getStartPos() == startPos)
+                return it;
+        }
+        return null;
+    }
+
+    /**
+     * 查找第一块非活动内存
+     * @return 该内存块实例（未找到则为null）
+     */
+    public SimMemoryBlock findFirstInactiveMemBlock()
+    {
+        for (SimMemoryBlock it : memoryBlockList)
+        {
+            if (it.getStatus() == SimMemoryBlock.Status.INACTIVE)
                 return it;
         }
         return null;

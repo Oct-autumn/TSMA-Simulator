@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+
 @Getter
 @Setter
 @Builder
@@ -40,9 +42,9 @@ public class SimProcess
      */
     private Property property;
     /**
-     * 关联进程ID（设为 -1 置空）
+     * 关联进程ID（设为 null 置空）
      */
-    private int associatedPID;
+    private ArrayList<Integer> associatedPidList;
     /**
      * 需要的内存大小
      */
@@ -66,7 +68,6 @@ public class SimProcess
     public enum Property
     {
         INDEPENDENT,
-        SYNCHRONIZE_PRE,
         SYNCHRONIZE_SUC
     }
 }

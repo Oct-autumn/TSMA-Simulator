@@ -12,19 +12,21 @@ import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.util.Callback;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable
 {
-    public Label processor1Status;
-    public Label processor2Status;
+    public Label processorStatus1;
+    public Label processorStatus2;
     public Text textMemStatus;
-    public HBox hBoxMemStatusBar;
+    //public HBox hBoxMemStatusBar;
 
     public TableView<VisMemoryBlockItem> tViewMemBlockTable;
     public TableColumn<VisMemoryBlockItem, String> tcMemBlockStartPos;
@@ -46,7 +48,6 @@ public class MainSceneController implements Initializable
     public Spinner<Integer> spinnerRequireRunTime;
     public Spinner<Integer> spinnerPriority;
     public RadioButton rbIndependent;
-    public RadioButton rbSynchronizationPre;
     public RadioButton rbSynchronizationSuc;
     public ChoiceBox<Integer> cbAssociatedPID;
     public Spinner<Integer> spinnerRequireMemSize;
@@ -75,7 +76,46 @@ public class MainSceneController implements Initializable
 
     public void addNewProcess()
     {
+        if (spinnerRequireRunTime.getValue() == null)
+            return;
+        if (spinnerPriority.getValue() == null)
+            return;
+        if (spinnerRequireMemSize.getValue() == null)
+            return;
 
+        if (rbSynchronizationSuc.isSelected())
+        {
+            if (cbAssociatedPID.getValue() == null)
+                return;
+
+            ArrayList<Integer> assocPidList = new ArrayList<>();
+            assocPidList.add(cbAssociatedPID.getValue());
+
+            CoreResource.processService.createNewProcess(
+                    tfThreadName.getText(),
+                    spinnerRequireRunTime.getValue(),
+                    spinnerPriority.getValue(),
+                    SimProcess.Property.SYNCHRONIZE_SUC,
+                    assocPidList,
+                    spinnerRequireMemSize.getValue()
+            );
+        } else
+        {
+            CoreResource.processService.createNewProcess(
+                    tfThreadName.getText(),
+                    spinnerRequireRunTime.getValue(),
+                    spinnerPriority.getValue(),
+                    SimProcess.Property.INDEPENDENT,
+                    null,
+                    spinnerRequireMemSize.getValue()
+            );
+        }
+
+        tfThreadName.setText("");
+        spinnerRequireRunTime.getValueFactory().setValue(1);
+        spinnerPriority.getValueFactory().setValue(0);
+        rbIndependent.setSelected(true);
+        spinnerRequireMemSize.getValueFactory().setValue(1);
     }
 
     @Override
@@ -85,14 +125,22 @@ public class MainSceneController implements Initializable
         spinnerPriority.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 256, 0));
         spinnerRequireMemSize.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, CoreResource.simulatorConfig.getTotalMemorySize(), 1));
         rbIndependent.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (t1) cbAssociatedPID.setDisable(true);
-        });
-        rbSynchronizationPre.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (t1) cbAssociatedPID.setDisable(false);
+            if (t1)
+            {
+                cbAssociatedPID.setDisable(true);
+                cbAssociatedPID.getItems().clear();
+            }
         });
         rbSynchronizationSuc.selectedProperty().addListener((observableValue, aBoolean, t1) -> {
-            if (t1) cbAssociatedPID.setDisable(false);
+            if (t1)
+            {
+                cbAssociatedPID.setDisable(false);
+                ObservableList<Integer> optionalPidList = CoreResource.processService.getOptionalPidList();
+                cbAssociatedPID.setItems(optionalPidList);
+            }
         });
+
+        //tViewMemBlockTable.sc
 
         tcMemBlockStartPos.setCellValueFactory(new PropertyValueFactory<>("startPos"));
         tcMemBlockEndPos.setCellValueFactory(new PropertyValueFactory<>("endPos"));
@@ -106,97 +154,21 @@ public class MainSceneController implements Initializable
         tcProcessProperty.setCellValueFactory(new PropertyValueFactory<>("propertyAndAssocPID"));
         tcProcessMemSize.setCellValueFactory(new PropertyValueFactory<>("requireMemSize"));
         tcProcessMemStartPos.setCellValueFactory(new PropertyValueFactory<>("memStartPos"));
-        tcToggleProcessHang.setCellFactory((col) -> new TableCell<>()
-                {
-                    @Override
-                    protected void updateItem(Button item, boolean empty)
-                    {
-                        super.updateItem(item, empty);
-
-                        //如果为空，则跳出
-                        if (empty) return;
-
-                        //获取模拟值
-                        final SimProcess simProcess = ProcessService.processMap.get(Integer.parseInt(visProcessItemList.get(getIndex()).getNameAndPID().split("/")[1]));
-                        if (simProcess == null)
-                            return;
-
-                        switch (Objects.requireNonNull(simProcess).getStatus())
-                        {
-
-                            case BACK, REVOKE, BLOCK, SYS_HANGUP ->
-                            {
-                            }
-                            case READY ->
-                            {
-                                Button button = new Button("挂起");
-                                button.setPrefHeight(20);
-                                button.setOnAction(actionEvent -> {
-                                    simProcess.setStatus(SimProcess.Status.USER_HANGUP);
-                                    //回收内存
-                                    CoreResource.memoryService.freeMemBlock(simProcess.getMemStartPos());
-                                    simProcess.setMemStartPos(-1);
-
-                                    //从就绪队列移出并加入到挂起队列
-                                    ProcessService.readyPL.remove((Integer) simProcess.getPID());
-                                    ProcessService.hangPL.add(simProcess.getPID());
-                                    CoreResource.mainSceneController.refreshTViewThreadTable();
-                                });
-                                this.setGraphic(button);
-                            }
-                            case RUNNING, USER_HANGUP ->
-                            {
-                                Button button = new Button("解挂");
-                                button.setPrefHeight(20);
-                                button.setOnAction(actionEvent -> {
-                                    if (ProcessService.readyPL.size() < CoreResource.simulatorConfig.getMaxReadyProcess())
-                                    {
-                                        int memBlockStartPos = CoreResource.memoryService.allocMemBlock(simProcess.getRequireMemSize(), SimMemoryBlock.Status.INUSE);
-                                        if (memBlockStartPos != -1)
-                                        {//成功分配内存，进入就绪队列
-                                            simProcess.setStatus(SimProcess.Status.READY);
-                                            simProcess.setMemStartPos(memBlockStartPos);
-                                            ProcessService.hangPL.remove((Integer) simProcess.getPID());
-                                            ProcessService.readyPL.add(simProcess.getPID());
-                                            return;
-                                        }
-                                    }
-
-                                    //内存分配失败，进入后备队列
-                                    simProcess.setStatus(SimProcess.Status.USER_HANGUP);
-                                    ProcessService.readyPL.remove(simProcess.getPID());
-                                    ProcessService.hangPL.add(simProcess.getPID());
-                                    CoreResource.mainSceneController.refreshTViewThreadTable();
-                                });
-                                this.setGraphic(button);
-                            }
-                        }
-
-
-//                        if (empty)
-//                        {
-//                            //如果此列为空默认不添加元素
-//                            setText(null);
-//                            setGraphic(null);
-//                        } else
-//                        {
-//                            this.setGraphic(button);
-//                        }
-                    }
-                }
-        );
+        tcToggleProcessHang.setCellValueFactory(new PropertyValueFactory<>("toggleHangButton"));
     }
 
     public void refreshTViewThreadTable()
     {
+        tViewThreadTable.getItems().clear();
         visProcessItemList.clear();
-        ProcessService.processMap.forEach((integer, simProcess) ->
+        ProcessService.getProcessMap().forEach((integer, simProcess) ->
                 visProcessItemList.add(new VisProcessItem(simProcess)));
         tViewThreadTable.setItems(visProcessItemList);
     }
 
     public void refreshTViewMemBlockTable()
     {
+        tViewMemBlockTable.getItems().clear();
         visMemoryBlockItemList.clear();
         for (SimMemoryBlock it : MemoryService.memoryBlockList)
             visMemoryBlockItemList.add(new VisMemoryBlockItem(it));

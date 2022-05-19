@@ -1,7 +1,11 @@
 package cn.octautumn.tsmasimulator.model;
 
+import cn.octautumn.tsmasimulator.CoreResource;
+import javafx.scene.control.Button;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Arrays;
 
 @Getter
 @Setter
@@ -36,6 +40,8 @@ public class VisProcessItem
      */
     private String memStartPos;
 
+    private Button toggleHangButton;
+
     public VisProcessItem(SimProcess simProcess)
     {
         this.nameAndPID = simProcess.getPName() + "/" + simProcess.getPID();
@@ -46,21 +52,38 @@ public class VisProcessItem
             case BACK -> this.status = "后备";
             case READY -> this.status = "就绪";
             case RUNNING -> this.status = "正在运行";
-            case BLOCK ->this.status = "阻塞";
-            case SYS_HANGUP ->this.status = "阻塞挂起";
-            case USER_HANGUP -> this.status = "挂起";
+            case BLOCK -> this.status = "阻塞";
+            case SYS_HANGUP -> this.status = "系统挂起";
+            case USER_HANGUP -> this.status = "用户挂起";
             case REVOKE -> this.status = "已完成";
         }
         switch (simProcess.getProperty())
         {
             case INDEPENDENT -> this.propertyAndAssocPID = "独立进程";
-            case SYNCHRONIZE_PRE -> this.propertyAndAssocPID = "前驱进程-" + simProcess.getAssociatedPID();
-            case SYNCHRONIZE_SUC -> this.propertyAndAssocPID = "后继进程-" + simProcess.getAssociatedPID();
+            case SYNCHRONIZE_SUC ->
+                    this.propertyAndAssocPID = "前驱进程-" + Arrays.toString(simProcess.getAssociatedPidList().toArray());
         }
         this.requireMemSize = String.valueOf(simProcess.getRequireMemSize());
         if (simProcess.getMemStartPos() == -1)
             this.memStartPos = "未分配";
         else
             this.memStartPos = String.valueOf(simProcess.getMemStartPos());
+
+        switch (simProcess.getStatus())
+        {
+            case READY, RUNNING, BLOCK, SYS_HANGUP ->
+            {
+                toggleHangButton = new Button("挂起");
+                toggleHangButton.setPrefHeight(20);
+                toggleHangButton.setOnAction(actionEvent -> CoreResource.processService.userHangupProcess(simProcess.getPID()));
+            }
+            case USER_HANGUP ->
+            {
+                toggleHangButton = new Button("解挂");
+                toggleHangButton.setPrefHeight(20);
+                toggleHangButton.setOnAction(actionEvent -> CoreResource.processService.tryToUnHangingProcess(simProcess.getPID()));
+            }
+            default -> toggleHangButton = null;
+        }
     }
 }

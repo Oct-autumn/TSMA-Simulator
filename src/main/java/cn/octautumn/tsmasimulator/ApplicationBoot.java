@@ -31,7 +31,7 @@ public class ApplicationBoot extends Application
         CoreResource.configStage.setResizable(false);
         CoreResource.configStage.setTitle("模拟器设置");
         FXMLLoader configSceneLoader = new FXMLLoader(ApplicationBoot.class.getResource("config-view.fxml"));
-        Scene configScene = new Scene(configSceneLoader.load(), 350, 200);
+        Scene configScene = new Scene(configSceneLoader.load(), 350, 240);
         CoreResource.configStage.setScene(configScene);
         CoreResource.configStage.initOwner(stage);
         CoreResource.configStage.initModality(Modality.WINDOW_MODAL);

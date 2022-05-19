@@ -31,7 +31,8 @@ public class SimMemoryBlock
     public enum Status
     {
         IDLE,
-        INUSE,
+        ACTIVE,
+        INACTIVE,
         RESERVED
     }
 }

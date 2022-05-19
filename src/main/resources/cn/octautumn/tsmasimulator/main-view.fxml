@@ -193,13 +193,12 @@
                               <ToggleGroup fx:id="a1" />
                            </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="rbSynchronizationPre" mnemonicParsing="false" text="同步进程（前驱）" toggleGroup="$a1" />
-                        <RadioButton fx:id="rbSynchronizationSuc" mnemonicParsing="false" text="同步进程（后继）" toggleGroup="$a1" />
+                        <RadioButton fx:id="rbSynchronizationSuc" mnemonicParsing="false" text="同步进程-后继" toggleGroup="$a1" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="前驱/后继进程：" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="前驱进程ID：" />
                         <ChoiceBox fx:id="cbAssociatedPID" disable="true" prefWidth="150.0">
                            <tooltip>
                               <Tooltip text="该进程的前驱/后继进程PID" />

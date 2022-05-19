@@ -4,24 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b4093ca3-4585-4d0b-943e-8e452b9bd0bc" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ConfigSceneController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/CoreResource.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/MainSceneController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SimulatorConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimMemoryBlock.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcess.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcessor.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/config-view.fxml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" afterDir="false" />
+    <list default="true" id="b4093ca3-4585-4d0b-943e-8e452b9bd0bc" name="变更" comment="Dev upload 20220519#1">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/cpumemsimulation/HelloApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ApplicationBoot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/cpumemsimulation/HelloController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/cn/octautumn/cpumemsimulation/main-view.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ApplicationBoot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/ApplicationBoot.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/CoreResource.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/CoreResource.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/MainSceneController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimMemoryBlock.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimMemoryBlock.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcess.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/SimProcess.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/VisMemoryBlockItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/VisMemoryBlockItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/VisProcessItem.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/model/VisProcessItem.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/MemoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/MemoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,20 +44,26 @@
     <option name="showLibraryContents" value="true" />
     <option name="showMembers" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "last_directory_selection": "D:/UserData/Documents/GitHub/TSMA-Simulator/src/main/java/cn/octautumn/tsmasimulator",
-    "last_opened_file_path": "C:/Users/lljki/AppData/Local/SceneBuilder/SceneBuilder.exe",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last.edited.regexp&quot;: &quot;&quot;,
+    &quot;last_directory_selection&quot;: &quot;D:/UserData/Documents/GitHub/TSMA-Simulator/src/main/java/cn/octautumn/tsmasimulator&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/DevelopKits/JFXSceneBuilder/SceneBuilder.exe&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;vcs.Git&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="cn.octautumn.tsmasimulator.model" />
+    </key>
+    <key name="MoveMembersDialog.RECENTS_KEY">
+      <recent name="cn.octautumn.tsmasimulator.service.ProcessorService" />
+      <recent name="cn.octautumn.tsmasimulator.service.MemoryService" />
+      <recent name="cn.octautumn.tsmasimulator.service.ProcessService" />
     </key>
   </component>
   <component name="RunManager">
@@ -84,7 +84,19 @@
       <option name="presentableId" value="Default" />
       <updated>1652710963579</updated>
       <workItem from="1652710966072" duration="2505000" />
+      <workItem from="1652765192048" duration="7515000" />
+      <workItem from="1652779794401" duration="5053000" />
+      <workItem from="1652840408623" duration="36897000" />
+      <workItem from="1652930469265" duration="13379000" />
     </task>
+    <task id="LOCAL-00001" summary="Dev upload 20220519#1">
+      <created>1652899347387</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1652899347387</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -95,11 +107,34 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="main" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Dev upload 20220519#1" />
+    <option name="LAST_COMMIT_MESSAGE" value="Dev upload 20220519#1" />
+  </component>
+  <component name="XDebuggerManager">
+    <watches-manager>
+      <configuration name="Application">
+        <watch expression="getIndex()" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

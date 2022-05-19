@@ -43,25 +43,10 @@ public class CoreResource
                     .status(SimProcessor.Status.IDLE)
                     .build());
 
-        //重置进程列表
-        ProcessService.processMap.clear();
-        ProcessService.readyPL.add(processService.addNewProcessIntoList("系统进程",
-                -1, 0,
-                SimProcess.Status.READY,
-                SimProcess.Property.INDEPENDENT,
-                -1,
-                simulatorConfig.getSystemReservedMemSize()));
-        ProcessService.processMap.get(0).setMemStartPos(0);
-        mainSceneController.refreshTViewThreadTable();
-
         //重置内存分块列表
-        MemoryService.memoryBlockList.clear();
-        MemoryService.memoryBlockList.add(SimMemoryBlock.builder()
-                .startPos(0)
-                .endPos(simulatorConfig.getTotalMemorySize() - 1)
-                .totalSize(simulatorConfig.getTotalMemorySize() - simulatorConfig.getSystemReservedMemSize())
-                .status(SimMemoryBlock.Status.IDLE)
-                .build());
-        CoreResource.memoryService.allocMemBlock(simulatorConfig.getSystemReservedMemSize(), SimMemoryBlock.Status.RESERVED);
+        memoryService.reset();
+
+        //重置进程列表
+        processService.reset();
     }
 }

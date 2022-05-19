@@ -32,8 +32,9 @@ public class VisMemoryBlockItem
 
         switch (simMemoryBlock.getStatus())
         {
-            case IDLE -> this.status = "空闲";
-            case INUSE -> this.status = "使用中";
+            case IDLE -> this.status = "空闲的";
+            case ACTIVE -> this.status = "活动的";
+            case INACTIVE -> this.status = "非活动的";
             case RESERVED ->this.status = "保留";
         }
     }
