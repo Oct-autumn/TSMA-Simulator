@@ -22,11 +22,11 @@ public class SimProcess
      */
     private final int PID;
     /**
-     * 需要运行的总时间（设为 -1 则一直运行）
+     * 需要运行的总时间（毫秒，设为 -1 则一直运行）
      */
     private int totalRunTime;
     /**
-     * 已运行的时间
+     * 已运行的时间（毫秒）
      */
     private int elapsedTime;
     /**

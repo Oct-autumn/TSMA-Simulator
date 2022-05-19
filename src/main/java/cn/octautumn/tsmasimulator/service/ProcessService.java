@@ -4,25 +4,67 @@ import cn.octautumn.tsmasimulator.CoreResource;
 import cn.octautumn.tsmasimulator.model.SimMemoryBlock;
 import cn.octautumn.tsmasimulator.model.SimProcess;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ProcessService
 {
     @Getter
-    private static final ConcurrentHashMap<Integer, SimProcess> processMap = new ConcurrentHashMap<>();
-    public static final ObservableList<Integer> backPL = FXCollections.observableArrayList();           //后备进程队列
-    public static final ObservableList<Integer> blockPL = FXCollections.observableArrayList();          //阻塞进程队列
-    public static final ObservableList<Integer> hangPL = FXCollections.observableArrayList();           //挂起进程队列
-    public static final ObservableList<Integer> finishPL = FXCollections.observableArrayList();         //完成进程队列
-    public static final ObservableList<Integer> readyPL = FXCollections.observableArrayList();          //就绪进程队列
-    public static final ObservableList<Integer> runningPL = FXCollections.observableArrayList();        //运行中进程队列
-    public static int pidNum = 0;
+    private final ConcurrentHashMap<Integer, SimProcess> processMap = new ConcurrentHashMap<>();
+
+    @AllArgsConstructor
+    public class ProcessIdList extends Vector<Integer>
+    {
+        @Override
+        public synchronized boolean add(Integer pid)
+        {
+            if (this.isEmpty())
+                return super.add(pid);
+            int priority0 = processMap.get(pid).getPriority();
+
+            for (int i = 0; i < this.size(); i++)
+            {
+                int priority = processMap.get(this.get(i)).getPriority();
+                if (priority0 > priority)
+                {
+                    super.add(i, pid);
+                    return true;
+                }
+                else if (priority0 == priority)
+                    if (pid > this.get(i))
+                    {
+                        super.add(i, pid);
+                        return true;
+                    }
+            }
+
+            return false;
+        }
+    }
+
+    @Getter
+    public final ProcessIdList backPL = new ProcessIdList();    //后备进程队列
+    @Getter
+    public final ProcessIdList blockPL = new ProcessIdList();   //阻塞进程队列
+    @Getter
+    public final ProcessIdList hangPL = new ProcessIdList();    //挂起进程队列
+    @Getter
+    public final ProcessIdList finishPL = new ProcessIdList();  //完成进程队列
+    @Getter
+    public final ProcessIdList readyPL = new ProcessIdList();   //就绪进程队列
+    @Getter
+    public final ProcessIdList runningPL = new ProcessIdList(); //运行中进程队列
+
+    public int pidNum = 0;
 
     public void reset()
     {
@@ -134,7 +176,7 @@ public class ProcessService
 
 
         CoreResource.mainSceneController.refreshTViewThreadTable();
-        return ProcessService.pidNum - 1;
+        return this.pidNum - 1;
     }
 
     /**
@@ -292,6 +334,16 @@ public class ProcessService
         return true;
     }
 
+    public boolean runProcess(Integer pid)
+    {
+        return true;
+    }
+
+    /**
+     * 获取pid列表
+     *
+     * @return pid列表
+     */
     public ObservableList<Integer> getOptionalPidList()
     {
         ObservableList<Integer> optionalPidList = FXCollections.observableArrayList();

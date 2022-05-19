@@ -23,6 +23,10 @@ public class SimProcessor
      * 状态
      */
     private Status status;
+    /**
+     * 时间片经过时间（毫秒）
+     */
+    private int timeSliceEla;
 
     public enum Status
     {

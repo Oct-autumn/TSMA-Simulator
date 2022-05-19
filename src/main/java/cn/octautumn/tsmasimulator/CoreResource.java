@@ -27,13 +27,6 @@ public class CoreResource
      */
     public static void resetSimulator()
     {
-        ProcessService.pidNum = 0;
-
-        ProcessService.readyPL.clear();
-        ProcessService.backPL.clear();
-        ProcessService.hangPL.clear();
-        ProcessService.finishPL.clear();
-
         //重置处理机列表
         ProcessorService.processorList.clear();
         for (int i = 0; i < simulatorConfig.getProcessorCount(); i++)
@@ -41,6 +34,7 @@ public class CoreResource
                     .processorID(i)
                     .runningPID(-1)
                     .status(SimProcessor.Status.IDLE)
+                    .timeSliceEla(0)
                     .build());
 
         //重置内存分块列表

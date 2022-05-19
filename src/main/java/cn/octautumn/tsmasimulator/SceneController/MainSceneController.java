@@ -1,6 +1,7 @@
 package cn.octautumn.tsmasimulator.SceneController;
 
 import cn.octautumn.tsmasimulator.CoreResource;
+import cn.octautumn.tsmasimulator.SimulatorRun;
 import cn.octautumn.tsmasimulator.model.SimMemoryBlock;
 import cn.octautumn.tsmasimulator.model.SimProcess;
 import cn.octautumn.tsmasimulator.model.VisMemoryBlockItem;
@@ -13,16 +14,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MainSceneController implements Initializable
 {
+    public Button btnToggleSimulation;
     public Label processorStatus1;
     public Label processorStatus2;
     public Text textMemStatus;
@@ -54,6 +53,7 @@ public class MainSceneController implements Initializable
 
     private final ObservableList<VisProcessItem> visProcessItemList = FXCollections.observableArrayList();
     private final ObservableList<VisMemoryBlockItem> visMemoryBlockItemList = FXCollections.observableArrayList();
+    private final SimulatorRun simulator = new SimulatorRun();
 
     public void showSettingDialog()
     {
@@ -66,12 +66,25 @@ public class MainSceneController implements Initializable
         CoreResource.resetSimulator();
     }
 
-    public void startSimulator()
+    public void startSimulation()
     {
+        simulator.start();
+
+        btnToggleSimulation.setText("暂停模拟");
+        btnToggleSimulation.setOnAction((actionEvent) -> stopSimulation());
     }
 
-    public void nextTimeSlice()
+    public void stopSimulation()
     {
+        simulator.stop();
+
+        btnToggleSimulation.setText("开始模拟");
+        btnToggleSimulation.setOnAction((actionEvent) -> startSimulation());
+    }
+
+    public void nextTimeStep()
+    {
+        simulator.nextTimeStep();
     }
 
     public void addNewProcess()
@@ -161,7 +174,7 @@ public class MainSceneController implements Initializable
     {
         tViewThreadTable.getItems().clear();
         visProcessItemList.clear();
-        ProcessService.getProcessMap().forEach((integer, simProcess) ->
+        CoreResource.processService.getProcessMap().forEach((integer, simProcess) ->
                 visProcessItemList.add(new VisProcessItem(simProcess)));
         tViewThreadTable.setItems(visProcessItemList);
     }

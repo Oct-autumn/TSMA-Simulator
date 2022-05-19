@@ -45,7 +45,7 @@ public class VisProcessItem
     public VisProcessItem(SimProcess simProcess)
     {
         this.nameAndPID = simProcess.getPName() + "/" + simProcess.getPID();
-        this.totalAndElapsedRunTime = simProcess.getTotalRunTime() + "/" + simProcess.getElapsedTime();
+        this.totalAndElapsedRunTime = String.format("%.3f/%.3f", simProcess.getElapsedTime()/1000.0d, simProcess.getTotalRunTime()/1000.0d);
         this.priority = String.valueOf(simProcess.getPriority());
         switch (simProcess.getStatus())
         {

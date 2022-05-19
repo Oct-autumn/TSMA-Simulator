@@ -27,11 +27,17 @@
       <ToolBar prefHeight="40.0" prefWidth="200.0">
         <items>
             <Button mnemonicParsing="false" onAction="#showSettingDialog" text="模拟器设置" />
+            <Separator orientation="VERTICAL" />
             <Button mnemonicParsing="false" onAction="#resetSimulator" text="重置模拟器" />
-            <Button mnemonicParsing="false" onAction="#startSimulator" text="开始模拟">
+            <Button fx:id="btnToggleSimulation" mnemonicParsing="false" onAction="#startSimulation" text="开始模拟">
                <tooltip>
                   <Tooltip text="将模拟器重置为初始状态" />
                </tooltip></Button>
+            <Button mnemonicParsing="false" onAction="#nextTimeStep" text="下一时间步">
+               <tooltip>
+                  <Tooltip text="将模拟器重置为初始状态" />
+               </tooltip>
+            </Button>
         </items>
       </ToolBar>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" VBox.vgrow="ALWAYS">
