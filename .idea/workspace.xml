@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b4093ca3-4585-4d0b-943e-8e452b9bd0bc" name="变更" comment="Dev upload 20220520#1&#10;第一个勉强能用的版本">
+    <list default="true" id="b4093ca3-4585-4d0b-943e-8e452b9bd0bc" name="变更" comment="Release upload 20220520#2&#10;第一个完全能用的版本">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/MainSceneController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/SceneController/MainSceneController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/cn/octautumn/tsmasimulator/service/ProcessService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/cn/octautumn/tsmasimulator/main-view.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
